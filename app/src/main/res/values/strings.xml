@@ -14,4 +14,6 @@
     <string name="view_indicator_icon">view indicator icon</string>
     <string name="average_view_count">Average View Count</string>
     <string name="average_answer_count">Average Answer Count</string>
+    <string name="pick_a_tag">Pick a tag</string>
+    <string name="clear_filter">Clear Filter</string>
 </resources>
