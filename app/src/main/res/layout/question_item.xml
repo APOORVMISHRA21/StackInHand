@@ -8,6 +8,7 @@
     android:layout_margin="4dp"
     app:elevation="4dp"
     app:cardCornerRadius="4dp"
+    app:cardBackgroundColor="@color/white"
     app:cardUseCompatPadding="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -70,6 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="Apoorv Mishra"
+            android:textColor="@color/black"
             app:layout_constraintStart_toEndOf="@id/avatar_card"
             app:layout_constraintTop_toBottomOf="@id/tv_question_item"
             android:textSize="10sp"/>
@@ -80,6 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:textSize="9sp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/tv_votes_count_item"
             app:layout_constraintStart_toEndOf="@+id/tv_votes_count_item"
             app:layout_constraintTop_toTopOf="@+id/tv_votes_count_item"
@@ -102,6 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:textSize="9sp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/tv_votes_count_item"
             app:layout_constraintStart_toEndOf="@+id/iv_view_icon"
             app:layout_constraintTop_toTopOf="@+id/tv_votes_count_item"
@@ -125,6 +129,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:text="@string/tv_example_date_item"
+            android:textColor="@color/black"
             android:textSize="9sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_views_count_item"
             app:layout_constraintStart_toEndOf="@+id/iv_date_icon"
@@ -163,6 +168,7 @@
             android:id="@+id/tv_votes_count_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
             android:layout_marginStart="8dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="8dp"
