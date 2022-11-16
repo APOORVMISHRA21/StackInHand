@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
+import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,13 +21,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), QuestionsFeedAdapter.OnQuestionClickInterface{
+class MainActivity : AppCompatActivity(), QuestionsFeedAdapter.OnQuestionClickInterface {
 
     private val genericViewModel by viewModels<GenericViewModel>()
 
     private var feedAdapter: QuestionsFeedAdapter? = null
 
-    private lateinit var binding : ActivityMainBinding
+    private var feedList: ArrayList<QuestionModel>? = null
+
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +37,7 @@ class MainActivity : AppCompatActivity(), QuestionsFeedAdapter.OnQuestionClickIn
         setContentView(binding.root)
         showLoader(true)
         observeViewModel()
+        setUpSearchListener()
     }
 
     fun observeViewModel() {
@@ -45,22 +49,62 @@ class MainActivity : AppCompatActivity(), QuestionsFeedAdapter.OnQuestionClickIn
             false
         )
         binding.recyclerView.adapter = feedAdapter
-        genericViewModel.questionFeedResponse.observe(this, {
+        genericViewModel.questionFeedResponse.observe(this) {
+            feedList = it.items
             findAverageStats(it.items)
             showLoader(false)
             feedAdapter!!.setData(it.items)
+        }
+    }
+
+    private fun setUpSearchListener() {
+        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(str: String?): Boolean {
+                showLoader(toShow = true)
+                if (str != null) {
+                    filterList(str)
+                } else {
+                    showLoader(toShow = false)
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(str: String?): Boolean {
+                showLoader(toShow = true)
+                if (str != null) {
+                    filterList(str)
+                } else {
+                    showLoader(toShow = false)
+                }
+                return false
+            }
         })
+    }
+
+    private fun filterList(str: String) {
+        if (feedList.isNullOrEmpty().not()) {
+            val filteredList = ArrayList<QuestionModel>()
+            for (question in feedList!!) {
+                if (question.title?.lowercase()?.contains(str.lowercase()) == true ||
+                    question.owner?.displayName?.lowercase()?.contains(str.lowercase()) == true
+                ) {
+                    filteredList.add(question)
+                }
+            }
+            feedAdapter!!.setData(filteredList)
+            showLoader(toShow = false)
+        }
     }
 
     private fun showLoader(toShow: Boolean) {
         binding.progressBar.visibility = if (toShow) View.VISIBLE else View.GONE
         binding.avgViewCountCard.visibility = if (toShow) View.GONE else View.VISIBLE
-        binding.avgAnswerCountCard.visibility = if(toShow) View.GONE else View.VISIBLE
-        binding.recyclerView.visibility = if(toShow) View.GONE else View.VISIBLE
+        binding.avgAnswerCountCard.visibility = if (toShow) View.GONE else View.VISIBLE
+        binding.recyclerView.visibility = if (toShow) View.GONE else View.VISIBLE
     }
 
     private fun findAverageStats(feedList: ArrayList<QuestionModel>?) {
-        if(feedList.isNullOrEmpty().not()) {
+        if (feedList.isNullOrEmpty().not()) {
             val totalItems = feedList?.size
             var totalViewCount = 0
             var totalAnswerCount = 0
@@ -73,7 +117,7 @@ class MainActivity : AppCompatActivity(), QuestionsFeedAdapter.OnQuestionClickIn
             try {
                 binding.tvAvgViewCount.text = (totalViewCount / totalItems).toString()
                 binding.tvAvgAnswerCount.text = (totalAnswerCount / totalItems).toString()
-            } catch (e:Exception) {
+            } catch (e: Exception) {
                 binding.avgViewCountCard.visibility = View.GONE
                 binding.avgAnswerCountCard.visibility = View.GONE
                 e.printStackTrace()
