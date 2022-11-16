@@ -14,3 +14,5 @@
   - A list of questions fetched through a [url](https://api.stackexchange.com/2.2/questions?key=ZiXCZbWaOwnDgpVT9Hx8IA%28%28&order=desc&sort=activity&site=stackoverflow) from stackoverflow rendered into app using [RecyclerView](https://developer.android.com/develop/ui/views/layout/recyclerview) .
   - A Search Bar to implement search feature based on question title and question author using Android [Search View](https://developer.android.com/reference/android/widget/SearchView) .
   - A Filter Button to implement filtering based on tags on question objects implemented in Bottom Sheets. 
+
+Go To [master](https://github.com/APOORVMISHRA21/StackInHand/tree/master) Branch to fetch the latest stable application.
